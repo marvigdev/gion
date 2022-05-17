@@ -12,7 +12,6 @@ export interface PostI {
 const PostSchema = new Schema<PostI>({
   identifier: {
     type: String,
-    default: () => nanoid(8),
     index: true,
   },
   title: {
@@ -30,8 +29,16 @@ const PostSchema = new Schema<PostI>({
   },
   deleteCode: {
     type: String,
-    default: nanoid,
   },
+});
+
+PostSchema.pre('save', function presave(next) {
+  if (this.isNew) {
+    this.identifier = nanoid(8);
+    this.deleteCode = nanoid();
+  }
+
+  next();
 });
 
 export default model<PostI>('Post', PostSchema);
