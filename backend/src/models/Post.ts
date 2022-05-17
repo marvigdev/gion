@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { nanoid } from 'nanoid';
 
-export interface Post {
+export interface PostI {
   identifier: string;
   title: string;
   content: string;
@@ -9,7 +9,7 @@ export interface Post {
   deleteCode?: string;
 }
 
-const PostSchema = new Schema<Post>({
+const PostSchema = new Schema<PostI>({
   identifier: {
     type: String,
     default: () => nanoid(8),
@@ -34,4 +34,4 @@ const PostSchema = new Schema<Post>({
   },
 });
 
-export default model<Post>('Post', PostSchema);
+export default model<PostI>('Post', PostSchema);
