@@ -16,6 +16,13 @@ abstract class PostService {
     await newPost.save();
     return newPost;
   }
+
+  static async delete(
+    postId: string,
+    deleteCode: string,
+  ): Promise<PostI | null> {
+    return null;
+  }
 }
 
 export default PostService;

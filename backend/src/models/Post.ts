@@ -6,7 +6,7 @@ export interface PostI {
   title: string;
   content: string;
   postedAt: Date;
-  deleteCode?: string;
+  deleteCode: string;
 }
 
 const PostSchema = new Schema<PostI>({

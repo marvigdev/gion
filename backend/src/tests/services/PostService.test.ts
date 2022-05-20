@@ -103,3 +103,50 @@ describe('PostService.create', () => {
     expect(savedPost.content).toEqual(payload.content);
   });
 });
+
+describe('PostService.delete', () => {
+  let post1: PostI;
+  let post2: PostI;
+
+  beforeAll(async () => {
+    post1 = await PostService.create({ title: '1', content: '1' });
+    post2 = await PostService.create({ title: '2', content: '2' });
+  });
+
+  afterAll(async () => database.clear());
+
+  test('should return null when postId is invalid', async () => {
+    const deletedPost = await PostService.delete(
+      'this-post-doesnt-exist',
+      'this-delete-code-neither',
+    );
+
+    expect(deletedPost).toBeNull();
+  });
+
+  test('should return null when deleteKey is incorrect', async () => {
+    const deletedPost = await PostService.delete(
+      post1.identifier,
+      'totally-not-the-delete-code',
+    );
+
+    expect(deletedPost).toBeNull();
+
+    const allPosts = await Post.find({});
+    expect(allPosts).toHaveLength(2);
+  });
+
+  test('should delete post correctly', async () => {
+    const deletedPost = await PostService.delete(
+      post1.identifier,
+      post1.deleteCode,
+    );
+
+    expect(deletedPost).toBe(post1);
+
+    const allPosts = await Post.find({});
+    expect(allPosts).toHaveLength(1);
+
+    expect(allPosts[0].identifier).toEqual(post2.identifier);
+  });
+});
