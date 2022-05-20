@@ -142,7 +142,7 @@ describe('PostService.delete', () => {
       post1.deleteCode,
     );
 
-    expect(deletedPost).toBe(post1);
+    expect(deletedPost?.identifier).toBe(post1.identifier);
 
     const allPosts = await Post.find({});
     expect(allPosts).toHaveLength(1);

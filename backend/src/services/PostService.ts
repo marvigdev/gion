@@ -20,6 +20,18 @@ abstract class PostService {
     await newPost.save();
     return newPost;
   }
+
+  static async delete(
+    postId: string,
+    deleteCode: string,
+  ): Promise<HydratedDocument<PostI> | null> {
+    const [post] = await this.getById(postId);
+    if (!post) return null;
+    if (post.deleteCode !== deleteCode) return null;
+
+    await post.delete();
+    return post;
+  }
 }
 
 export default PostService;
