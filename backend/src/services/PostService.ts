@@ -1,3 +1,4 @@
+import { HydratedDocument } from 'mongoose';
 import Post, { PostI } from '../models/Post';
 
 export interface CreatePostProps {
@@ -6,22 +7,18 @@ export interface CreatePostProps {
 }
 
 abstract class PostService {
-  static async getById(...posts: string[]): Promise<PostI[]> {
+  static async getById(...posts: string[]): Promise<HydratedDocument<PostI>[]> {
     const foundPosts = await Post.find({ identifier: { $in: posts } });
     return foundPosts;
   }
 
-  static async create({ title, content }: CreatePostProps): Promise<PostI> {
+  static async create({
+    title,
+    content,
+  }: CreatePostProps): Promise<HydratedDocument<PostI>> {
     const newPost = new Post({ title, content });
     await newPost.save();
     return newPost;
-  }
-
-  static async delete(
-    postId: string,
-    deleteCode: string,
-  ): Promise<PostI | null> {
-    return null;
   }
 }
 
